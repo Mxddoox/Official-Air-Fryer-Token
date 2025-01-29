@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>$AIRFRYER - The Hottest Meme Coin</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vanta@latest/dist/vanta.net.min.js"></script>
+    <style>
+        :root {
+            --primary: #FF6B6B;
+            --secondary: #FFE66D;
+            --bg-gradient: linear-gradient(45deg, #FF6B6B, #FFE66D);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
+
+        body {
+            background: var(--bg-gradient);
+            overflow-x: hidden;
+        }
+
+        /* Parallax Header */
+        #vanta-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: -1;
+        }
+
+        .hero {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .coin-logo {
+            width: 200px;
+            filter: drop-shadow(0 0 20px var(--secondary));
+            animation: float 3s ease-in-out infinite;
+        }
+
+        /* Game Container */
+        #game-container {
+            width: 800px;
+            height: 400px;
+            margin: 2rem auto;
+            border: 3px solid white;
+            border-radius: 20px;
+            position: relative;
+            overflow: hidden;
+            background: rgba(255,255,255,0.1);
+        }
+
+        #airfryer-basket {
+            width: 120px;
+            height: 60px;
+            background: url('https://i.ibb.co/0jqW3hN/basket.png') no-repeat;
+            background-size: contain;
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            cursor: pointer;
+        }
+
+        .falling-food {
+            width: 50px;
+            height: 50px;
+            position: absolute;
+            animation: fall 4s linear infinite;
+        }
+
+        /* Stats Dashboard */
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            padding: 2rem;
+            background: rgba(0,0,0,0.3);
+            border-radius: 15px;
+            margin: 2rem;
+        }
+
+        .stat-item {
+            text-align: center;
+            color: white;
+            padding: 1rem;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(5px);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        @keyframes fall {
+            0% { top: -50px; }
+            100% { top: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <div id="vanta-canvas"></div>
+
+    <div class="hero">
+        <img src="https://i.ibb.co/0jqW3hN/basket.png" class="coin-logo" alt="Airfryer Coin">
+        <h1>$AIRFRYER</h1>
+        <p>The coin that's too hot to handle!</p>
+        <button id="connectWallet" class="glow-button">Connect Wallet</button>
+    </div>
+
+    <div class="dashboard">
+        <div class="stat-item">
+            <h3>Price</h3>
+            <p>$0.000069</p>
+        </div>
+        <div class="stat-item">
+            <h3>Holders</h3>
+            <p>42,069</p>
+        </div>
+        <div class="stat-item">
+            <h3>Market Cap</h3>
+            <p>$420.69M</p>
+        </div>
+        <div class="stat-item">
+            <h3>Burned</h3>
+            <p>🔥 69%</p>
+        </div>
+    </div>
+
+    <div id="game-container">
+        <div id="airfryer-basket"></div>
+    </div>
+
+    <script>
+        // 3D Background Effect
+        VANTA.NET({
+            el: "#vanta-canvas",
+            mouseControls: true,
+            touchControls: true,
+            gyroControls: false,
+            minHeight: 200.00,
+            minWidth: 200.00,
+            scale: 1.00,
+            color: 0xffe66d,
+            backgroundColor: 0xff6b6b
+        });
+
+        // Game Logic
+        let score = 0;
+        const basket = document.getElementById('airfryer-basket');
+        
+        document.addEventListener('keydown', (e) => {
+            const left = parseInt(window.getComputedStyle(basket).left);
+            if (e.key === 'ArrowLeft' && left > 0) {
+                basket.style.left = `${left - 20}px`;
+            } else if (e.key === 'ArrowRight' && left < 680) {
+                basket.style.left = `${left + 20}px`;
+            }
+        });
+
+        // Generate falling food
+        setInterval(() => {
+            const food = document.createElement('div');
+            food.className = 'falling-food';
+            food.style.left = `${Math.random() * 750}px`;
+            food.style.background = `url('https://i.ibb.co/${Math.random() < 0.5 ? '5WnZ3yJ' : '4tK8v0C'}/fries.png') no-repeat center/contain`;
+            document.getElementById('game-container').appendChild(food);
+
+            food.addEventListener('animationend', () => {
+                const basketRect = basket.getBoundingClientRect();
+                const foodRect = food.getBoundingClientRect();
+                
+                if (foodRect.bottom >= basketRect.top && 
+                    foodRect.right >= basketRect.left && 
+                    foodRect.left <= basketRect.right) {
+                    score++;
+                    document.querySelector('#connectWallet').textContent = `Score: ${score} $AIR`;
+                }
+                food.remove();
+            });
+        }, 1500);
+
+        // Mock Wallet Connection
+        document.getElementById('connectWallet').addEventListener('click', () => {
+            alert('Wallet connected! (Mock functionality)');
+        });
+    </script>
+</body>
+</html>
