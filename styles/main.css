@@ -1,0 +1,215 @@
+/* ===== BASE STYLES ===== */
+:root {
+  --primary: #FF6B6B;
+  --secondary: #FFE66D;
+  --accent: #4ECDC4;
+  --dark: #2D2D2D;
+  --gradient: linear-gradient(135deg, #FF6B6B 0%, #FFE66D 100%);
+  --font-heading: 'Comic Neue', cursive;
+  --font-body: 'Inter', sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--gradient);
+  font-family: var(--font-body);
+  overflow-x: hidden;
+  min-height: 100vh;
+}
+
+/* ===== 3D ANIMATED HEADER ===== */
+.vanta-canvas {
+  position: fixed !important;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: -1;
+  filter: saturate(1.2);
+}
+
+.hero {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  text-align: center;
+  color: white;
+  position: relative;
+  text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+}
+
+/* ===== FLOATING COIN LOGO ===== */
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(-5deg); }
+  50% { transform: translateY(-30px) rotate(5deg); }
+}
+
+.coin-logo {
+  width: 250px;
+  filter: drop-shadow(0 0 30px var(--secondary));
+  animation: float 3.5s ease-in-out infinite;
+  transition: transform 0.3s ease;
+}
+
+.coin-logo:hover {
+  transform: scale(1.1) rotate(-10deg);
+}
+
+/* ===== NEON GLOW BUTTONS ===== */
+.glow-button {
+  background: rgba(255,255,255,0.15);
+  border: 2px solid var(--secondary);
+  padding: 1rem 2.5rem;
+  border-radius: 50px;
+  color: white;
+  font-size: 1.2rem;
+  cursor: pointer;
+  margin-top: 2rem;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.glow-button::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg, transparent, rgba(255,255,255,0.2), transparent);
+  transform: rotate(45deg);
+  transition: all 0.5s ease;
+}
+
+.glow-button:hover {
+  background: rgba(255,255,255,0.25);
+  box-shadow: 0 0 30px var(--secondary);
+  transform: translateY(-3px);
+}
+
+.glow-button:hover::before {
+  animation: buttonGlow 1.5s ease infinite;
+}
+
+@keyframes buttonGlow {
+  0% { transform: rotate(45deg) translateX(-100%); }
+  100% { transform: rotate(45deg) translateX(100%); }
+}
+
+/* ===== GAME CONTAINER ===== */
+#game-container {
+  width: min(90%, 1200px);
+  height: 600px;
+  margin: 3rem auto;
+  border-radius: 30px;
+  position: relative;
+  overflow: hidden;
+  background: rgba(0,0,0,0.15);
+  backdrop-filter: blur(8px);
+  border: 2px solid rgba(255,255,255,0.2);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+}
+
+#airfryer-basket {
+  width: 150px;
+  height: 80px;
+  background: url('assets/basket.png') no-repeat center/contain;
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  cursor: grab;
+  transition: transform 0.1s ease;
+}
+
+#airfryer-basket:active {
+  cursor: grabbing;
+  transform: translateX(-50%) scale(0.95);
+}
+
+/* ===== FALLING FOOD ANIMATION ===== */
+@keyframes fall {
+  0% { top: -10%; opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { top: 110%; opacity: 0; }
+}
+
+.falling-food {
+  width: 60px;
+  height: 60px;
+  position: absolute;
+  animation: fall 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  filter: drop-shadow(0 5px 10px rgba(0,0,0,0.3));
+  transition: transform 0.3s ease;
+}
+
+.falling-food:hover {
+  transform: rotate(360deg) scale(1.2);
+}
+
+/* ===== STATS DASHBOARD ===== */
+.dashboard {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  padding: 2rem;
+  margin: 3rem auto;
+  width: min(90%, 1400px);
+  background: rgba(255,255,255,0.1);
+  border-radius: 20px;
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.2);
+}
+
+.stat-item {
+  text-align: center;
+  padding: 1.5rem;
+  border-radius: 15px;
+  background: linear-gradient(145deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+  transition: transform 0.3s ease;
+}
+
+.stat-item:hover {
+  transform: translateY(-5px);
+  background: linear-gradient(145deg, rgba(255,255,255,0.15), rgba(255,255,255,0.1));
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+@media (max-width: 768px) {
+  .hero h1 {
+    font-size: 2.5rem;
+  }
+
+  #game-container {
+    height: 400px;
+  }
+
+  .dashboard {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .coin-logo {
+    width: 180px;
+  }
+
+  .dashboard {
+    grid-template-columns: 1fr;
+  }
+}
